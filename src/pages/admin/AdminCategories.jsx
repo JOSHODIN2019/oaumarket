@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import AdminNav from '../../components/admin/AdminNav'
+import AdminLayout from '../../components/admin/AdminLayout'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import { Input, Textarea } from '../../components/ui/Input'
-import { colors, fontFamily } from '../../components/ui/tokens'
+import { colors } from '../../components/ui/tokens'
 import { getAdminSession } from '../../lib/session'
 import { fetchCategories, createAdminCategory, updateAdminCategory, deleteAdminCategory } from '../../lib/api'
 
@@ -85,9 +85,7 @@ export default function AdminCategories() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: colors.surface, fontFamily }}>
-      <AdminNav />
-      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '32px 24px 80px' }}>
+    <AdminLayout maxWidth="760px">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <h1 style={{ fontSize: '22px', fontWeight: 700, color: colors.text }}>Categories</h1>
           <Button variant="accent" size="sm" onClick={openCreate}>+ New Category</Button>
@@ -109,7 +107,6 @@ export default function AdminCategories() {
             </Card>
           ))}
         </div>
-      </div>
 
       <Modal open={creating} onClose={closeModals} title="New Category">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -129,6 +126,6 @@ export default function AdminCategories() {
           <Button variant="accent" loading={pending} onClick={handleUpdate}>Save</Button>
         </div>
       </Modal>
-    </div>
+    </AdminLayout>
   )
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import AdminNav from '../../components/admin/AdminNav'
+import AdminLayout from '../../components/admin/AdminLayout'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
-import { colors, fontFamily } from '../../components/ui/tokens'
+import { colors } from '../../components/ui/tokens'
 import { getAdminSession } from '../../lib/session'
 import { fetchAdminSummary, suspendUser, reinstateUser, fetchAdminReports, resolveReport } from '../../lib/api'
 
@@ -50,9 +50,7 @@ export default function AdminModeration() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: colors.surface, fontFamily }}>
-      <AdminNav />
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px 80px', display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+    <AdminLayout maxWidth="1100px" contentStyle={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
         <Card style={{ flex: 1 }}>
           <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text, marginBottom: '14px' }}>Students</h2>
           {users === undefined && <p style={{ fontSize: '13px', color: colors.textMuted }}>Loading…</p>}
@@ -98,7 +96,6 @@ export default function AdminModeration() {
             ))}
           </div>
         </Card>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }

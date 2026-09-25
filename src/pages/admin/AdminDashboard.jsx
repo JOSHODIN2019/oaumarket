@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import AdminNav from '../../components/admin/AdminNav'
+import AdminLayout from '../../components/admin/AdminLayout'
 import Card from '../../components/ui/Card'
-import { colors, fontFamily } from '../../components/ui/tokens'
+import { colors } from '../../components/ui/tokens'
 import { getAdminSession } from '../../lib/session'
 import { fetchAdminSummary } from '../../lib/api'
 
@@ -27,10 +27,8 @@ export default function AdminDashboard() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: colors.surface, fontFamily }}>
-      <AdminNav />
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px 80px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: colors.text, marginBottom: '24px' }}>Overview</h1>
+    <AdminLayout maxWidth="1100px">
+      <h1 style={{ fontSize: '22px', fontWeight: 700, color: colors.text, marginBottom: '24px' }}>Overview</h1>
 
         {summary === undefined && <p style={{ color: colors.textSecondary, fontSize: '14px' }}>Loading…</p>}
 
@@ -84,7 +82,6 @@ export default function AdminDashboard() {
             </div>
           </>
         )}
-      </div>
-    </div>
+    </AdminLayout>
   )
 }

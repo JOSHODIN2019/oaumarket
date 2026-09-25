@@ -20,9 +20,9 @@ export const colors = {
   success: '#14F195',
   danger: '#ef4444',
   warning: '#f59e0b',
-  // Fixed (non-theme-reactive) - the solid "primary" button and dark
-  // surfaces like TopNav/AdminNav are deliberately dark in both
-  // themes, so they need a color that doesn't flip with `text`.
+  // Fixed (non-theme-reactive) - the solid "primary" button variant
+  // is deliberately dark in both themes, so it needs a color that
+  // doesn't flip with `text`.
   solid: '#0d0c22',
   solidHover: '#1a1a2e',
   onSolid: '#ffffff',

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { colors, radius, fontFamily } from '../../components/ui/tokens'
 import Button from '../../components/ui/Button'
 import Card from '../../components/ui/Card'
+import ThemeToggle from '../../components/ui/ThemeToggle'
 import { adminLogin } from '../../lib/api'
 import { saveAdminSession } from '../../lib/session'
 
@@ -35,17 +36,21 @@ export default function AdminLogin() {
   return (
     <div style={{
       minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: '#0d0c22', fontFamily,
+      background: colors.surface, fontFamily, position: 'relative',
     }}>
-      <Card style={{ width: '380px', background: '#16152e', border: '1px solid #2a2a44' }}>
-        <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>
+      <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+        <ThemeToggle />
+      </div>
+
+      <Card style={{ width: '380px' }}>
+        <h1 style={{ fontSize: '20px', fontWeight: 700, color: colors.text, marginBottom: '4px' }}>
           OAU<span style={{ color: colors.primary }}>Market</span> Admin
         </h1>
-        <p style={{ fontSize: '13px', color: '#8888a0', marginBottom: '24px' }}>Sign in to the admin console.</p>
+        <p style={{ fontSize: '13px', color: colors.textSecondary, marginBottom: '24px' }}>Sign in to the admin console.</p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div>
-            <label style={{ fontSize: '13px', fontWeight: 600, color: '#fff', display: 'block', marginBottom: '4px' }}>Email</label>
+            <label style={{ fontSize: '13px', fontWeight: 600, color: colors.text, display: 'block', marginBottom: '4px' }}>Email</label>
             <input
               type="email"
               value={email}
@@ -53,13 +58,13 @@ export default function AdminLogin() {
               required
               style={{
                 width: '100%', padding: '11px 14px', fontSize: '14px', fontFamily,
-                color: '#fff', background: '#0d0c22', border: '1.5px solid #2a2a44',
+                color: colors.text, background: colors.surface, border: `1.5px solid ${colors.border}`,
                 borderRadius: radius.sm, outline: 'none',
               }}
             />
           </div>
           <div>
-            <label style={{ fontSize: '13px', fontWeight: 600, color: '#fff', display: 'block', marginBottom: '4px' }}>Password</label>
+            <label style={{ fontSize: '13px', fontWeight: 600, color: colors.text, display: 'block', marginBottom: '4px' }}>Password</label>
             <input
               type="password"
               value={password}
@@ -67,7 +72,7 @@ export default function AdminLogin() {
               required
               style={{
                 width: '100%', padding: '11px 14px', fontSize: '14px', fontFamily,
-                color: '#fff', background: '#0d0c22', border: '1.5px solid #2a2a44',
+                color: colors.text, background: colors.surface, border: `1.5px solid ${colors.border}`,
                 borderRadius: radius.sm, outline: 'none',
               }}
             />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import AdminNav from '../../components/admin/AdminNav'
+import AdminLayout from '../../components/admin/AdminLayout'
 import Card from '../../components/ui/Card'
-import { colors, fontFamily } from '../../components/ui/tokens'
+import { colors } from '../../components/ui/tokens'
 import { getAdminSession } from '../../lib/session'
 import { fetchAdminAuditLogs } from '../../lib/api'
 
@@ -28,9 +28,7 @@ export default function AdminAuditLogs() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: colors.surface, fontFamily }}>
-      <AdminNav />
-      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '32px 24px 80px' }}>
+    <AdminLayout maxWidth="760px">
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: colors.text, marginBottom: '20px' }}>Audit Log</h1>
 
         {logs === undefined && <p style={{ color: colors.textSecondary, fontSize: '14px' }}>Loading…</p>}
@@ -58,7 +56,6 @@ export default function AdminAuditLogs() {
             </div>
           ))}
         </Card>
-      </div>
-    </div>
+    </AdminLayout>
   )
 }

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import AdminNav from '../../components/admin/AdminNav'
+import AdminLayout from '../../components/admin/AdminLayout'
 import Card from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import { Textarea } from '../../components/ui/Input'
-import { colors, fontFamily } from '../../components/ui/tokens'
+import { colors } from '../../components/ui/tokens'
 import { getAdminSession } from '../../lib/session'
 import { fetchAdminTransactions, flagTransaction, unflagTransaction } from '../../lib/api'
 
@@ -60,9 +60,7 @@ export default function AdminTransactions() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: colors.surface, fontFamily }}>
-      <AdminNav />
-      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '32px 24px 80px' }}>
+    <AdminLayout maxWidth="900px">
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: colors.text, marginBottom: '20px' }}>Transactions</h1>
 
         {transactions === undefined && <p style={{ color: colors.textSecondary, fontSize: '14px' }}>Loading…</p>}
@@ -95,7 +93,6 @@ export default function AdminTransactions() {
           })}
           {transactions?.length === 0 && <p style={{ fontSize: '14px', color: colors.textMuted }}>No transactions yet.</p>}
         </div>
-      </div>
 
       <Modal open={!!flagTarget} onClose={() => setFlagTarget(null)} title="Flag Transaction">
         <Textarea label="Reason" value={reason} onChange={(e) => setReason(e.target.value)} rows={3} placeholder="Why is this transaction being flagged?" />
@@ -104,6 +101,6 @@ export default function AdminTransactions() {
           <Button variant="secondary" onClick={() => setFlagTarget(null)} style={{ flex: 1 }}>Cancel</Button>
         </div>
       </Modal>
-    </div>
+    </AdminLayout>
   )
 }
