@@ -38,8 +38,7 @@ export default function AdminDashboard() {
               <StatCard label="Students" value={summary.users.count} />
               <StatCard label="Listings" value={summary.products.count} />
               <StatCard label="Transactions" value={summary.transactions.count} />
-              <StatCard label="Flagged" value={summary.flaggedTransactions.count} accent={summary.flaggedTransactions.count > 0 ? colors.danger : colors.text} />
-              <StatCard label="Unread Notifs" value={summary.notifications.unreadCount} />
+              <StatCard label="Unresolved Reports" value={summary.reports.unresolvedCount} accent={summary.reports.unresolvedCount > 0 ? colors.danger : colors.text} />
             </div>
 
             <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
@@ -65,18 +64,18 @@ export default function AdminDashboard() {
 
               <Card style={{ flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text }}>Flagged Transactions</h2>
-                  <Link to="/admin/transactions" style={{ fontSize: '12px', color: colors.primary, fontWeight: 600 }}>View all →</Link>
+                  <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text }}>Unresolved Reports</h2>
+                  <Link to="/admin/moderation" style={{ fontSize: '12px', color: colors.primary, fontWeight: 600 }}>View all →</Link>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {summary.flaggedTransactions.recent.map((t) => (
-                    <div key={t.id} style={{ fontSize: '13px' }}>
-                      <span style={{ fontWeight: 600, color: colors.text }}>{t.buyerName}</span>
-                      <span style={{ color: colors.textMuted }}> → {t.sellerName} · ₦{t.amount.toLocaleString()}</span>
-                      {t.flagReason && <p style={{ fontSize: '12px', color: colors.danger, margin: '2px 0 0' }}>{t.flagReason}</p>}
+                  {summary.reports.recent.map((r) => (
+                    <div key={r.id} style={{ fontSize: '13px' }}>
+                      <span style={{ fontWeight: 600, color: colors.text, textTransform: 'uppercase' }}>{r.targetType}</span>
+                      <span style={{ color: colors.textMuted }}> reported by {r.reporterName}</span>
+                      <p style={{ fontSize: '12px', color: colors.danger, margin: '2px 0 0' }}>{r.reason}</p>
                     </div>
                   ))}
-                  {summary.flaggedTransactions.recent.length === 0 && <p style={{ fontSize: '13px', color: colors.textMuted }}>Nothing flagged.</p>}
+                  {summary.reports.recent.length === 0 && <p style={{ fontSize: '13px', color: colors.textMuted }}>Nothing to resolve.</p>}
                 </div>
               </Card>
             </div>

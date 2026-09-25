@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Notification, NotificationDocument } from '../notifications/schemas/notification.schema.js';
 import { Product, ProductDocument } from '../products/schemas/product.schema.js';
+import { Report, ReportDocument } from '../reports/schemas/report.schema.js';
 import { Transaction, TransactionDocument } from '../transactions/schemas/transaction.schema.js';
 import { User, UserDocument } from '../users/schemas/user.schema.js';
 
@@ -14,7 +14,7 @@ export class AdminDashboardService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     @InjectModel(Product.name) private readonly productModel: Model<ProductDocument>,
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
-    @InjectModel(Notification.name) private readonly notificationModel: Model<NotificationDocument>,
+    @InjectModel(Report.name) private readonly reportModel: Model<ReportDocument>,
   ) {}
 
   async getSummary() {
@@ -24,10 +24,8 @@ export class AdminDashboardService {
       productCount,
       transactionCount,
       recentTransactions,
-      flaggedCount,
-      recentFlagged,
-      notificationCount,
-      unreadNotificationCount,
+      unresolvedReportCount,
+      recentUnresolvedReports,
     ] = await Promise.all([
       this.userModel.countDocuments().exec(),
       this.userModel
@@ -39,16 +37,17 @@ export class AdminDashboardService {
       this.productModel.countDocuments().exec(),
       this.transactionModel.countDocuments().exec(),
       this.transactionModel.find().sort({ createdAt: -1 }).limit(RECENT_LIMIT).exec(),
-      this.transactionModel.countDocuments({ flagged: true }).exec(),
-      this.transactionModel.find({ flagged: true }).sort({ createdAt: -1 }).limit(RECENT_LIMIT).exec(),
-      this.notificationModel.countDocuments().exec(),
-      this.notificationModel.countDocuments({ read: false }).exec(),
+      this.reportModel.countDocuments({ resolved: false }).exec(),
+      this.reportModel.find({ resolved: false }).sort({ createdAt: -1 }).limit(RECENT_LIMIT).exec(),
     ]);
 
     const involvedUserIds = new Set<string>();
-    for (const transaction of [...recentTransactions, ...recentFlagged]) {
+    for (const transaction of recentTransactions) {
       involvedUserIds.add(transaction.buyerId);
       involvedUserIds.add(transaction.sellerId);
+    }
+    for (const report of recentUnresolvedReports) {
+      involvedUserIds.add(report.reporterId);
     }
     const validInvolvedUserIds = Array.from(involvedUserIds).filter((id) => Types.ObjectId.isValid(id));
     const involvedUsers = await this.userModel.find({ _id: { $in: validInvolvedUserIds } }).select({ fullName: 1 }).exec();
@@ -71,13 +70,17 @@ export class AdminDashboardService {
         count: transactionCount,
         recent: recentTransactions.map((transaction) => this.serializeTransaction(transaction, userNamesById)),
       },
-      flaggedTransactions: {
-        count: flaggedCount,
-        recent: recentFlagged.map((transaction) => this.serializeTransaction(transaction, userNamesById)),
-      },
-      notifications: {
-        count: notificationCount,
-        unreadCount: unreadNotificationCount,
+      reports: {
+        unresolvedCount: unresolvedReportCount,
+        recent: recentUnresolvedReports.map((report) => ({
+          id: report._id.toString(),
+          reporterId: report.reporterId,
+          reporterName: userNamesById.get(report.reporterId) ?? 'Unknown user',
+          targetType: report.targetType,
+          targetId: report.targetId,
+          reason: report.reason,
+          createdAt: report.createdAt,
+        })),
       },
     };
   }
