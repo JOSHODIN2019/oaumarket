@@ -39,11 +39,11 @@ export default function AdminAuditLogs() {
             <div
               key={log._id}
               style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
                 padding: '14px 20px', borderBottom: i < logs.length - 1 ? `1px solid ${colors.border}` : 'none',
               }}
             >
-              <div style={{ minWidth: 0 }}>
+              <div style={{ minWidth: 0, flex: '1 1 200px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: colors.text, margin: 0 }}>
                   {ACTION_LABELS[log.action] || log.action}
                   {log.detail ? ` — ${log.detail}` : ''}

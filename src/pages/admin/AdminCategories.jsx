@@ -86,7 +86,7 @@ export default function AdminCategories() {
 
   return (
     <AdminLayout maxWidth="760px">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
           <h1 style={{ fontSize: '22px', fontWeight: 700, color: colors.text }}>Categories</h1>
           <Button variant="accent" size="sm" onClick={openCreate}>+ New Category</Button>
         </div>
@@ -95,12 +95,12 @@ export default function AdminCategories() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {categories?.map((c) => (
-            <Card key={c._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-              <div style={{ minWidth: 0 }}>
+            <Card key={c._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <div style={{ minWidth: 0, flex: '1 1 160px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: colors.text, margin: 0 }}>{c.name}</p>
-                <p style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0' }}>/{c.slug}{c.description ? ` · ${c.description}` : ''}</p>
+                <p style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0', overflowWrap: 'break-word' }}>/{c.slug}{c.description ? ` · ${c.description}` : ''}</p>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                 <Button variant="secondary" size="sm" onClick={() => openEdit(c)}>Edit</Button>
                 <Button variant="ghost" size="sm" onClick={() => handleDelete(c)}>Delete</Button>
               </div>

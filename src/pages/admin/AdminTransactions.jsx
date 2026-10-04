@@ -70,8 +70,8 @@ export default function AdminTransactions() {
             const style = STATUS_STYLES[t.status]
             return (
               <Card key={t.id} style={{ borderColor: t.flagged ? colors.danger : colors.border }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  <div style={{ minWidth: 0, flex: '1 1 200px' }}>
                     <p style={{ fontSize: '13px', fontWeight: 600, color: colors.text, margin: 0 }}>Transaction {t.id.slice(-6)}</p>
                     <p style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0' }}>
                       Product {t.productId.slice(-6)} · ₦{t.amount.toLocaleString()} · {PAYMENT_LABELS[t.paymentMethod] || t.paymentMethod}

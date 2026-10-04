@@ -48,8 +48,8 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {summary.users.recent.map((u) => (
-                    <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
-                      <div>
+                    <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', gap: '8px', flexWrap: 'wrap' }}>
+                      <div style={{ minWidth: 0, overflowWrap: 'break-word' }}>
                         <span style={{ fontWeight: 600, color: colors.text }}>{u.fullName}</span>
                         <span style={{ color: colors.textMuted }}> · {u.matricNumber}</span>
                       </div>
