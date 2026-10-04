@@ -8,7 +8,7 @@ import { fetchAdminSummary } from '../../lib/api'
 
 function StatCard({ label, value, accent }) {
   return (
-    <Card style={{ flex: 1 }}>
+    <Card style={{ flex: '1 1 140px', minWidth: '140px' }}>
       <p style={{ fontSize: '12px', fontWeight: 600, color: colors.textMuted, textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '8px' }}>{label}</p>
       <p style={{ fontSize: '30px', fontWeight: 700, color: accent || colors.text }}>{value}</p>
     </Card>
@@ -34,15 +34,15 @@ export default function AdminDashboard() {
 
         {summary && (
           <>
-            <div style={{ display: 'flex', gap: '16px', marginBottom: '28px' }}>
+            <div style={{ display: 'flex', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
               <StatCard label="Students" value={summary.users.count} />
               <StatCard label="Listings" value={summary.products.count} />
               <StatCard label="Transactions" value={summary.transactions.count} />
               <StatCard label="Unresolved Reports" value={summary.reports.unresolvedCount} accent={summary.reports.unresolvedCount > 0 ? colors.danger : colors.text} />
             </div>
 
-            <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-              <Card style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+              <Card style={{ flex: 1, minWidth: '260px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text }}>Recent Students</h2>
                 </div>
@@ -62,7 +62,7 @@ export default function AdminDashboard() {
                 </div>
               </Card>
 
-              <Card style={{ flex: 1 }}>
+              <Card style={{ flex: 1, minWidth: '260px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text }}>Unresolved Reports</h2>
                   <Link to="/admin/moderation" style={{ fontSize: '12px', color: colors.primary, fontWeight: 600 }}>View all →</Link>

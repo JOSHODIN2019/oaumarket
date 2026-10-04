@@ -74,8 +74,8 @@ export default function Messages() {
   return (
     <div style={{ minHeight: '100vh', background: colors.bg, fontFamily: "'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
       <TopNav />
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', height: 'calc(100vh - 140px)' }}>
-        <div style={{ border: `1px solid ${colors.border}`, borderRadius: '12px', overflowY: 'auto' }}>
+      <div className="msg-grid" style={{ maxWidth: '1100px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', height: 'calc(100vh - 140px)' }}>
+        <div className="msg-inbox" style={{ border: `1px solid ${colors.border}`, borderRadius: '12px', overflowY: 'auto' }}>
           <div style={{ padding: '16px', borderBottom: `1px solid ${colors.border}` }}>
             <h1 style={{ fontSize: '17px', fontWeight: 700, color: colors.text, margin: 0 }}>Messages</h1>
           </div>
@@ -109,7 +109,7 @@ export default function Messages() {
           })}
         </div>
 
-        <div style={{ border: `1px solid ${colors.border}`, borderRadius: '12px', display: 'flex', flexDirection: 'column' }}>
+        <div className="msg-thread" style={{ border: `1px solid ${colors.border}`, borderRadius: '12px', display: 'flex', flexDirection: 'column' }}>
           {!active ? (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.textMuted, fontSize: '13px' }}>
               Select a conversation

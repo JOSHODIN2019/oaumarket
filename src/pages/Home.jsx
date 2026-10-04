@@ -119,8 +119,8 @@ export default function Home() {
       <TopNav />
 
       {/* ── Hero ──────────────────────────────────────────── */}
-      <section style={{ borderBottom: `1px solid ${colors.border}`, padding: '72px 0 64px' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 48px', display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap' }}>
+      <section style={{ borderBottom: `1px solid ${colors.border}`, padding: 'clamp(40px, 8vw, 72px) 0 clamp(36px, 7vw, 64px)' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 clamp(16px, 5vw, 48px)', display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap' }}>
 
           {/* Left */}
           <div style={{ flex: 1 }}>
@@ -140,7 +140,7 @@ export default function Home() {
               transition={{ duration: 0.35 }}
               style={{
                 fontFamily: "system-ui, 'Segoe UI', Roboto, sans-serif",
-                fontSize: '56px', fontWeight: 700,
+                fontSize: 'clamp(32px, 6vw, 56px)', fontWeight: 700,
                 color: colors.text, lineHeight: 1.1, letterSpacing: '-1.68px',
                 marginBottom: '22px',
               }}
@@ -188,14 +188,14 @@ export default function Home() {
           </div>
 
           {/* Right — Hero Carousel */}
-          <div style={{ flex: '0 0 52%', minWidth: '360px', maxWidth: '620px', margin: '0' }}>
+          <div style={{ flex: '0 0 52%', minWidth: 'min(360px, 100%)', maxWidth: '620px', margin: '0' }}>
             <HeroCarousel />
           </div>
         </div>
       </section>
 
       {/* ── Content area ──────────────────────────────────── */}
-      <div id="listings-grid" style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 48px 80px' }}>
+      <div id="listings-grid" style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 clamp(16px, 5vw, 48px) 80px' }}>
 
         {/* Content tabs */}
         <div style={{ display: 'flex', borderBottom: `1px solid ${colors.border}`, marginBottom: '24px' }}>
@@ -279,8 +279,8 @@ export default function Home() {
         ) : (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '28px 24px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+            gap: '28px 20px',
           }}>
             {filtered.map((product, i) => (
               <ProductCard
@@ -301,7 +301,7 @@ export default function Home() {
       </div>
 
       {/* ── Footer ────────────────────────────────────────── */}
-      <footer style={{ borderTop: `1px solid ${colors.border}`, padding: '28px 48px' }}>
+      <footer style={{ borderTop: `1px solid ${colors.border}`, padding: '28px clamp(16px, 5vw, 48px)' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '18px', color: colors.text }}>
             OAU<span style={{ color: '#9945FF' }}>Market</span>

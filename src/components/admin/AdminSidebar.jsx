@@ -22,20 +22,20 @@ export default function AdminSidebar() {
   }
 
   return (
-    <aside style={{
+    <aside className="admin-sidebar" style={{
       position: 'sticky', top: 0, height: '100vh', flexShrink: 0,
       width: '220px', display: 'flex', flexDirection: 'column',
       background: colors.bg, borderRight: `1px solid ${colors.border}`,
       fontFamily: "'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     }}>
-      <div style={{ padding: '20px 20px 16px' }}>
-        <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '18px', color: colors.text }}>
+      <div style={{ padding: '20px 20px 16px', flexShrink: 0 }}>
+        <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '18px', color: colors.text, whiteSpace: 'nowrap' }}>
           OAU<span style={{ color: '#9945FF' }}>Market</span>
         </span>
-        <p style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0' }}>Admin Console</p>
+        <p className="admin-sidebar-subtitle" style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0' }}>Admin Console</p>
       </div>
 
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '0 12px', flex: 1 }}>
+      <nav className="admin-sidebar-nav" style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '0 12px', flex: 1 }}>
         {LINKS.map((link) => {
           const isActive = location.pathname === link.to
           return (
@@ -55,9 +55,9 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div style={{ padding: '16px 20px', borderTop: `1px solid ${colors.border}`, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '13px', color: colors.textSecondary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+      <div className="admin-sidebar-foot" style={{ padding: '16px 20px', borderTop: `1px solid ${colors.border}`, display: 'flex', flexDirection: 'column', gap: '12px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+          <span className="admin-sidebar-subtitle" style={{ fontSize: '13px', color: colors.textSecondary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {session?.admin?.name}
           </span>
           <ThemeToggle />

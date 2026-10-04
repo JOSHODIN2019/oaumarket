@@ -205,7 +205,7 @@ export default function ProductDetail() {
   return (
     <div style={{ minHeight: '100vh', background: colors.bg, fontFamily: "'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
       <TopNav />
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 24px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '40px' }}>
+      <div className="pd-grid" style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 24px', display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '40px' }}>
         <div>
           <div style={{ borderRadius: '16px', overflow: 'hidden', aspectRatio: '4/3', background: colors.surfaceHover, position: 'relative' }}>
             {product.imageUrls?.[0] ? (

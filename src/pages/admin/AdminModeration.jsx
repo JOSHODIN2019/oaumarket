@@ -50,8 +50,8 @@ export default function AdminModeration() {
   }
 
   return (
-    <AdminLayout maxWidth="1100px" contentStyle={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-        <Card style={{ flex: 1 }}>
+    <AdminLayout maxWidth="1100px" contentStyle={{ display: 'flex', gap: '20px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <Card style={{ flex: 1, minWidth: '260px' }}>
           <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text, marginBottom: '14px' }}>Students</h2>
           {users === undefined && <p style={{ fontSize: '13px', color: colors.textMuted }}>Loading…</p>}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -74,7 +74,7 @@ export default function AdminModeration() {
           </div>
         </Card>
 
-        <Card style={{ flex: 1 }}>
+        <Card style={{ flex: 1, minWidth: '260px' }}>
           <h2 style={{ fontSize: '15px', fontWeight: 700, color: colors.text, marginBottom: '14px' }}>Reports</h2>
           {reports === undefined && <p style={{ fontSize: '13px', color: colors.textMuted }}>Loading…</p>}
           {reports?.length === 0 && <p style={{ fontSize: '13px', color: colors.textMuted }}>No reports filed.</p>}

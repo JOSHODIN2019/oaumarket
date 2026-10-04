@@ -20,6 +20,7 @@ export default function TopNav() {
   const [searchType, setSearchType] = useState('Products')
   const [typeOpen, setTypeOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function TopNav() {
     }}>
       <div style={{
         maxWidth: '1400px', margin: '0 auto', padding: '0 20px',
-        height: '64px', display: 'flex', alignItems: 'center', gap: '16px',
+        minHeight: '64px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap',
       }}>
 
         {/* Logo */}
@@ -75,7 +76,7 @@ export default function TopNav() {
         </button>
 
         {/* Embedded search bar */}
-        <form onSubmit={handleSearchSubmit} style={{
+        <form onSubmit={handleSearchSubmit} className="tn-search" style={{
           flex: 1, maxWidth: '440px',
           display: 'flex', alignItems: 'center',
           background: colors.surfaceHover, borderRadius: '100px',
@@ -160,7 +161,7 @@ export default function TopNav() {
         </form>
 
         {/* Nav links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+        <nav className="tn-navlinks" style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
           {NAV_LINKS.map(link => {
             const isActive = pathname === link.path
             return (
@@ -191,7 +192,9 @@ export default function TopNav() {
 
         {/* Right actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
-          <ThemeToggle />
+          <span className="tn-theme-desktop" style={{ display: 'flex' }}>
+            <ThemeToggle />
+          </span>
 
           <button
             onClick={() => navigate('/sell')}
@@ -247,6 +250,49 @@ export default function TopNav() {
               </span>
             )}
           </button>
+
+          <button
+            className="tn-hamburger"
+            onClick={() => setMobileNavOpen(o => !o)}
+            aria-label="Menu"
+            style={{
+              width: '36px', height: '36px', borderRadius: '8px',
+              border: `1.5px solid ${colors.border}`, background: colors.bg,
+              alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', color: colors.textSecondary,
+            }}
+          >
+            <MenuIcon />
+          </button>
+
+          {mobileNavOpen && (
+            <div style={{
+              position: 'absolute', top: '46px', right: 0,
+              background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '12px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.12)', overflow: 'hidden',
+              zIndex: 50, minWidth: '200px',
+            }}>
+              {NAV_LINKS.map(link => (
+                <button
+                  key={link.path}
+                  onClick={() => { setMobileNavOpen(false); navigate(link.path) }}
+                  style={{
+                    display: 'block', width: '100%', padding: '12px 16px',
+                    background: pathname === link.path ? colors.surfaceHover : 'none',
+                    border: 'none', textAlign: 'left', cursor: 'pointer',
+                    fontSize: '13.5px', color: colors.text, fontWeight: pathname === link.path ? 600 : 400,
+                    fontFamily: 'inherit', borderBottom: `1px solid ${colors.border}`,
+                  }}
+                >
+                  {link.label}
+                </button>
+              ))}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px' }}>
+                <span style={{ fontSize: '13px', color: colors.textSecondary }}>Theme</span>
+                <ThemeToggle />
+              </div>
+            </div>
+          )}
 
           <button
             onClick={() => setMenuOpen(o => !o)}
@@ -321,6 +367,16 @@ function BellIcon() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
       <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+  )
+}
+
+function MenuIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
     </svg>
   )
 }

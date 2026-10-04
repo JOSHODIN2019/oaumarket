@@ -107,3 +107,70 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 30px var(--sm-bg) inset !important;
   -webkit-text-fill-color: var(--sm-text) !important;
 }
+
+/* ─── Responsive overrides ───────────────────────────────────────
+   Most of the app is styled with inline `style` objects (the
+   project's convention), which always beat a plain class selector -
+   so the handful of layout properties that genuinely need to change
+   per breakpoint (grid columns, flex-direction, show/hide) are
+   overridden here with `!important` rather than rewritten as
+   class-driven styles throughout every page. Everything else
+   (spacing, sizing) is handled inline with `clamp()`, which doesn't
+   need a breakpoint at all. */
+
+/* Top nav: collapse the inline links + search into a hamburger menu */
+.tn-hamburger { display: none; }
+
+@media (max-width: 880px) {
+  .tn-navlinks, .tn-theme-desktop { display: none !important; }
+  .tn-hamburger { display: flex !important; }
+  .tn-search {
+    order: 10;
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+    margin-top: 8px;
+  }
+}
+
+/* Product detail: image | info side-by-side becomes stacked */
+@media (max-width: 760px) {
+  .pd-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Messages: inbox | thread side-by-side becomes stacked, thread first */
+@media (max-width: 760px) {
+  .msg-grid {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+  }
+  .msg-inbox { max-height: 320px; overflow-y: auto; }
+  .msg-thread { height: 60vh; }
+}
+
+/* Admin console: sidebar becomes a horizontal top bar instead of a
+   fixed-width left rail */
+@media (max-width: 780px) {
+  .admin-shell { flex-direction: column !important; }
+  .admin-sidebar {
+    position: static !important;
+    height: auto !important;
+    width: 100% !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--sm-border);
+    overflow-x: auto;
+  }
+  .admin-sidebar-nav {
+    flex-direction: row !important;
+    flex: none !important;
+    padding: 8px !important;
+  }
+  .admin-sidebar-foot {
+    border-top: none !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+  }
+  .admin-sidebar-subtitle { display: none !important; }
+}

@@ -36,13 +36,13 @@ export default function AdminLogin() {
   return (
     <div style={{
       minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: colors.surface, fontFamily, position: 'relative',
+      background: colors.surface, fontFamily, position: 'relative', padding: '20px',
     }}>
       <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
         <ThemeToggle />
       </div>
 
-      <Card style={{ width: '380px' }}>
+      <Card style={{ width: 'min(380px, 100%)' }}>
         <h1 style={{ fontSize: '20px', fontWeight: 700, color: colors.text, marginBottom: '4px' }}>
           OAU<span style={{ color: colors.primary }}>Market</span> Admin
         </h1>
