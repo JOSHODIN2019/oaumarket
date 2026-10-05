@@ -91,7 +91,8 @@ export const updateTransactionStatus = (id, status, actorId) =>
 // ---- Offers ----
 export const createOffer = (payload) => request('/offers', withJsonBody('POST', payload))
 export const fetchOffersForUser = (userId) => request(`/offers?userId=${encodeURIComponent(userId)}`)
-export const acceptOffer = (id, actorId) => request(`/offers/${encodeURIComponent(id)}/accept`, withJsonBody('PATCH', { actorId }))
+export const acceptOffer = (id, actorId, meetupLocation) =>
+  request(`/offers/${encodeURIComponent(id)}/accept`, withJsonBody('PATCH', { actorId, meetupLocation }))
 export const declineOffer = (id, actorId) => request(`/offers/${encodeURIComponent(id)}/decline`, withJsonBody('PATCH', { actorId }))
 export const withdrawOffer = (id, actorId) => request(`/offers/${encodeURIComponent(id)}/withdraw`, withJsonBody('PATCH', { actorId }))
 

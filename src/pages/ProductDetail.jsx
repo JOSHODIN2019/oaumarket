@@ -7,6 +7,7 @@ import Modal from '../components/ui/Modal'
 import { Textarea, Input, Select } from '../components/ui/Input'
 import { colors } from '../components/ui/tokens'
 import { getSession } from '../lib/session'
+import { CAMPUS_LOCATIONS } from '../lib/campusLocations'
 import {
   fetchProductById,
   fetchProductsBySeller,
@@ -42,12 +43,12 @@ export default function ProductDetail() {
   const [messageText, setMessageText] = useState('')
   const [messageSending, setMessageSending] = useState(false)
   const [messageSent, setMessageSent] = useState(false)
-  const [payOpen, setPayOpen] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState('card')
-  const [buying, setBuying] = useState(false)
-  const [buyError, setBuyError] = useState('')
-  const [bought, setBought] = useState(false)
-  const [receipt, setReceipt] = useState(null)
+  const [pickupOpen, setPickupOpen] = useState(false)
+  const [meetupLocation, setMeetupLocation] = useState(CAMPUS_LOCATIONS[0])
+  const [meetupOther, setMeetupOther] = useState('')
+  const [arranging, setArranging] = useState(false)
+  const [arrangeError, setArrangeError] = useState('')
+  const [arranged, setArranged] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
   const [reportTarget, setReportTarget] = useState('product')
   const [reportReason, setReportReason] = useState('')
@@ -84,29 +85,37 @@ export default function ProductDetail() {
 
   const isOwnListing = product && myId === product.sellerId
 
-  const handlePay = async () => {
-    setBuying(true)
-    setBuyError('')
-    // No real payment gateway is connected - this is a simulated
-    // checkout for the demo, with a short fake "processing" delay
-    // before the transaction is recorded.
-    await new Promise((resolve) => setTimeout(resolve, 1400))
+  const openPickupModal = () => {
+    setPickupOpen(true)
+    setMeetupLocation(CAMPUS_LOCATIONS[0])
+    setMeetupOther('')
+    setArrangeError('')
+  }
+
+  const handleArrangePickup = async () => {
+    const location = meetupLocation === 'Other' ? meetupOther.trim() : meetupLocation
+    if (!location) {
+      setArrangeError('Please choose or enter where on campus you\'ll meet.')
+      return
+    }
+    setArranging(true)
+    setArrangeError('')
     const result = await createTransaction({
       buyerId: myId,
       sellerId: product.sellerId,
       productId: product._id,
       amount: product.price,
-      paymentMethod,
+      meetupLocation: location,
     })
-    setBuying(false)
+    setArranging(false)
     if (result.status === 'success') {
-      setReceipt(result.data)
-      setBought(true)
-      setPayOpen(false)
+      setMeetupLocation(location)
+      setArranged(true)
+      setPickupOpen(false)
     } else if (result.status === 'network-error') {
-      setBuyError("Couldn't reach the server.")
+      setArrangeError("Couldn't reach the server.")
     } else {
-      setBuyError(result.message || 'Something went wrong.')
+      setArrangeError(result.message || 'Something went wrong.')
     }
   }
 
@@ -261,17 +270,20 @@ export default function ProductDetail() {
 
           {!isOwnListing && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {bought ? (
+              {arranged ? (
                 <Card style={{ background: '#f0fdf4', borderColor: '#bbf7d0' }}>
-                  <p style={{ color: '#15803d', fontWeight: 700, margin: '0 0 4px' }}>✓ Payment simulated successfully</p>
-                  <p style={{ color: '#166534', fontSize: '12px', margin: 0, fontFamily: 'monospace' }}>Ref: {receipt?.paymentReference}</p>
+                  <p style={{ color: '#15803d', fontWeight: 700, margin: '0 0 4px' }}>✓ Pickup arranged</p>
+                  <p style={{ color: '#166534', fontSize: '12px', margin: 0 }}>Meet at {meetupLocation} to pay and collect the item.</p>
                 </Card>
               ) : (
-                <Button variant="accent" size="lg" disabled={!product.available} onClick={() => setPayOpen(true)}>
-                  {product.available ? 'Buy Now' : 'Sold'}
+                <Button variant="accent" size="lg" disabled={!product.available} onClick={openPickupModal}>
+                  {product.available ? 'Arrange Pickup' : 'Sold'}
                 </Button>
               )}
-              {buyError && <span style={{ fontSize: '12px', color: colors.danger }}>{buyError}</span>}
+              {arrangeError && <span style={{ fontSize: '12px', color: colors.danger }}>{arrangeError}</span>}
+              <p style={{ fontSize: '12px', color: colors.textMuted, margin: 0 }}>
+                🤝 All OAUMarket exchanges happen in person, on campus — no online payments.
+              </p>
 
               <Button variant="secondary" size="lg" disabled={!product.available} onClick={openOfferModal}>
                 Make an Offer
@@ -290,40 +302,31 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <Modal open={payOpen} onClose={() => { if (!buying) setPayOpen(false) }} title="Checkout">
-        {buying ? (
-          <div style={{ textAlign: 'center', padding: '32px 0' }}>
-            <div style={{
-              width: '32px', height: '32px', margin: '0 auto 16px',
-              border: `3px solid ${colors.border}`, borderTopColor: colors.primary,
-              borderRadius: '50%', animation: 'sm-spin 0.7s linear infinite',
-            }} />
-            <style>{'@keyframes sm-spin { to { transform: rotate(360deg) } }'}</style>
-            <p style={{ fontSize: '14px', color: colors.textSecondary, margin: 0 }}>Processing payment (simulated)…</p>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <p style={{ fontSize: '13px', color: colors.textMuted, margin: 0 }}>
-              This is a simulated checkout — no real payment gateway is connected.
-            </p>
-            <p style={{ fontSize: '20px', fontWeight: 700, color: colors.text, margin: 0 }}>₦{product.price.toLocaleString()}</p>
-            <Select label="Payment method" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-              <option value="card">Card</option>
-              <option value="bank_transfer">Bank Transfer</option>
-              <option value="cash_on_pickup">Cash on Pickup</option>
-            </Select>
-            {paymentMethod !== 'cash_on_pickup' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <Input label={paymentMethod === 'card' ? 'Card number' : 'Account number'} placeholder={paymentMethod === 'card' ? '4242 4242 4242 4242' : '0123456789'} disabled />
-                <p style={{ fontSize: '11px', color: colors.textMuted, margin: 0 }}>Demo field — not sent anywhere.</p>
-              </div>
-            )}
-            {buyError && <span style={{ fontSize: '12px', color: colors.danger }}>{buyError}</span>}
-            <Button variant="accent" onClick={handlePay}>
-              Pay ₦{product.price.toLocaleString()}
-            </Button>
-          </div>
-        )}
+      <Modal open={pickupOpen} onClose={() => { if (!arranging) setPickupOpen(false) }} title="Arrange Pickup">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <p style={{ fontSize: '13px', color: colors.textMuted, margin: 0 }}>
+            OAUMarket exchanges happen in person, on campus. Agree on the price in chat first if it's different from the listed price — otherwise, just pick a public, well-known spot on campus to meet, pay, and collect the item.
+          </p>
+          <p style={{ fontSize: '20px', fontWeight: 700, color: colors.text, margin: 0 }}>₦{product.price.toLocaleString()}</p>
+          <Select label="Meetup location" value={meetupLocation} onChange={(e) => setMeetupLocation(e.target.value)}>
+            {CAMPUS_LOCATIONS.map((loc) => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+            <option value="Other">Other (specify)</option>
+          </Select>
+          {meetupLocation === 'Other' && (
+            <Input
+              label="Where on campus?"
+              value={meetupOther}
+              onChange={(e) => setMeetupOther(e.target.value)}
+              placeholder="e.g. Faculty of Technology"
+            />
+          )}
+          {arrangeError && <span style={{ fontSize: '12px', color: colors.danger }}>{arrangeError}</span>}
+          <Button variant="accent" loading={arranging} onClick={handleArrangePickup}>
+            Confirm Pickup
+          </Button>
+        </div>
       </Modal>
 
       <Modal open={offerOpen} onClose={() => setOfferOpen(false)} title="Make an Offer">

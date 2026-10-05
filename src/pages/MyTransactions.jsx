@@ -13,12 +13,6 @@ const STATUS_STYLES = {
   cancelled: { bg: colors.surfaceHover, color: colors.textMuted },
 }
 
-const PAYMENT_LABELS = {
-  card: 'Card',
-  bank_transfer: 'Bank Transfer',
-  cash_on_pickup: 'Cash on Pickup',
-}
-
 export default function MyTransactions() {
   const session = getSession()
   const myId = session?.user?.id
@@ -88,8 +82,7 @@ export default function MyTransactions() {
                       {titles[t.productId] || 'Loading…'}
                     </Link>
                     <p style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0' }}>
-                      {isBuyer ? 'Buying' : 'Selling'} · {PAYMENT_LABELS[t.paymentMethod] || t.paymentMethod}
-                      {t.paymentReference ? ` · Ref: ${t.paymentReference}` : ''}
+                      {isBuyer ? 'Buying' : 'Selling'} · Meet at {t.meetupLocation}
                     </p>
                   </div>
                   <span style={{ fontSize: '14px', fontWeight: 700, color: colors.primary, whiteSpace: 'nowrap' }}>₦{t.amount.toLocaleString()}</span>

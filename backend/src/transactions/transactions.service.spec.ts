@@ -36,14 +36,14 @@ describe('TransactionsService', () => {
   describe('create', () => {
     it('rejects a buyer transacting with themselves', async () => {
       await expect(
-        service.create({ buyerId, sellerId: buyerId, productId: 'product-1', amount: 1000, paymentMethod: 'card' }),
+        service.create({ buyerId, sellerId: buyerId, productId: 'product-1', amount: 1000, meetupLocation: 'Oduduwa Hall' }),
       ).rejects.toThrow(BadRequestException);
       expect(transactionModel.create).not.toHaveBeenCalled();
     });
 
     it('creates a transaction defaulting to "pending" status', async () => {
       transactionModel.create.mockResolvedValue({ status: 'pending' });
-      const result = await service.create({ buyerId, sellerId, productId: 'product-1', amount: 1000, paymentMethod: 'card' });
+      const result = await service.create({ buyerId, sellerId, productId: 'product-1', amount: 1000, meetupLocation: 'Oduduwa Hall' });
       expect(result.status).toBe('pending');
     });
   });

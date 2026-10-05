@@ -3,18 +3,14 @@ import { HydratedDocument } from 'mongoose';
 
 export type TransactionDocument = HydratedDocument<Transaction>;
 
-// A simple purchase/exchange record - no escrow, no wallet
-// settlement. Tracks whether a buyer's purchase/exchange with a
-// seller is still open, done, or called off.
+// A simple exchange record - no escrow, no wallet settlement, no
+// payment processing of any kind. Every exchange on the platform
+// happens in person, on campus: price is agreed over chat or an
+// offer, then the two students pick a meetup point to hand the item
+// over. This record tracks whether that handoff is still pending,
+// done, or called off.
 export const TRANSACTION_STATUSES = ['pending', 'completed', 'cancelled'] as const;
 export type TransactionStatus = (typeof TRANSACTION_STATUSES)[number];
-
-// No real payment gateway is integrated - this only records which
-// simulated method the buyer picked, for the campus-marketplace demo
-// flow (see PROJECT_RULES: real payment gateways need separate
-// approval).
-export const PAYMENT_METHODS = ['card', 'bank_transfer', 'cash_on_pickup'] as const;
-export type PaymentMethod = (typeof PAYMENT_METHODS)[number];
 
 @Schema({ timestamps: true })
 export class Transaction {
@@ -44,14 +40,11 @@ export class Transaction {
   @Prop()
   flagReason?: string;
 
-  @Prop({ type: String, required: true, enum: PAYMENT_METHODS })
-  paymentMethod: PaymentMethod;
-
-  // Server-generated, never trusted from the client - a fake
-  // reference number so the simulated "receipt" looks real without
-  // any actual payment processor involved.
+  // A public, well-known spot on campus - e.g. "Oduduwa Hall" or
+  // "Awolowo Hall Gate" - where the buyer and seller agreed to meet
+  // and hand over the item.
   @Prop({ required: true })
-  paymentReference: string;
+  meetupLocation: string;
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);

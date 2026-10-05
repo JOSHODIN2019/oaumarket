@@ -21,7 +21,7 @@ const HERO_CONTENT = {
     bullets: [
       'Browse items, food & services from fellow students',
       'Message the seller directly to arrange a safe handoff',
-      'Make an offer, or buy at the listed price',
+      'Make an offer, or arrange pickup at a meetup point on campus',
     ],
     cta: 'Browse Listings',
   },

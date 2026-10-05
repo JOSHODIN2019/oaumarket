@@ -65,7 +65,7 @@ export class OffersService {
       .exec();
   }
 
-  async accept(id: string, actorId: string): Promise<OfferDocument> {
+  async accept(id: string, actorId: string, meetupLocation?: string): Promise<OfferDocument> {
     const offer = await this.findById(id);
     if (offer.sellerId !== actorId) {
       throw new ForbiddenException('Only the seller can accept an offer.');
@@ -89,16 +89,19 @@ export class OffersService {
       return offer;
     }
 
-    // An accepted cash offer was negotiated over messaging, not
-    // through the Buy Now payment step, so there's no method the
-    // buyer picked - cash-on-pickup is the reasonable default for an
-    // in-person deal.
+    if (!meetupLocation) {
+      throw new BadRequestException('A meetup location on campus is required to accept a cash offer.');
+    }
+
+    // An accepted cash offer was negotiated over messaging - this just
+    // records where on campus the two students agreed to meet and
+    // hand the item over.
     const transaction = await this.transactionsService.create({
       buyerId: offer.buyerId,
       sellerId: offer.sellerId,
       productId: offer.productId,
       amount: offer.offerAmount as number,
-      paymentMethod: 'cash_on_pickup',
+      meetupLocation,
     });
     offer.status = 'accepted';
     offer.transactionId = transaction._id.toString();

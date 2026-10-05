@@ -1,16 +1,9 @@
-import { randomBytes } from 'crypto';
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { NotificationsService } from '../notifications/notifications.service.js';
 import { CreateTransactionDto } from './dto/create-transaction.dto.js';
 import { Transaction, TransactionDocument } from './schemas/transaction.schema.js';
-
-// A fake reference for the simulated payment "receipt" - never a real
-// gateway transaction id, just enough to look like one in the demo UI.
-function generatePaymentReference(): string {
-  return `SIM-${randomBytes(5).toString('hex').toUpperCase()}`;
-}
 
 @Injectable()
 export class TransactionsService {
@@ -29,8 +22,7 @@ export class TransactionsService {
       sellerId: dto.sellerId,
       productId: dto.productId,
       amount: dto.amount,
-      paymentMethod: dto.paymentMethod,
-      paymentReference: generatePaymentReference(),
+      meetupLocation: dto.meetupLocation,
     });
   }
 

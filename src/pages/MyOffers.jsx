@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom'
 import TopNav from '../components/home/TopNav'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
+import Modal from '../components/ui/Modal'
+import { Input, Select } from '../components/ui/Input'
 import { colors } from '../components/ui/tokens'
 import { getSession } from '../lib/session'
+import { CAMPUS_LOCATIONS } from '../lib/campusLocations'
 import { fetchOffersForUser, acceptOffer, declineOffer, withdrawOffer, fetchProductById } from '../lib/api'
 
 const STATUS_STYLES = {
@@ -20,6 +23,10 @@ export default function MyOffers() {
   const [offers, setOffers] = useState(undefined)
   const [titles, setTitles] = useState({})
   const [pending, setPending] = useState(null)
+  const [acceptTarget, setAcceptTarget] = useState(null)
+  const [meetupLocation, setMeetupLocation] = useState(CAMPUS_LOCATIONS[0])
+  const [meetupOther, setMeetupOther] = useState('')
+  const [acceptError, setAcceptError] = useState('')
 
   const load = () => {
     fetchOffersForUser(myId).then((result) => {
@@ -54,6 +61,30 @@ export default function MyOffers() {
     const result = await action(offer._id, myId)
     if (result.status === 'success') {
       setOffers((current) => current.map((o) => (o._id === offer._id ? result.data : o)))
+    }
+    setPending(null)
+  }
+
+  const openAcceptModal = (offer) => {
+    setAcceptTarget(offer)
+    setMeetupLocation(CAMPUS_LOCATIONS[0])
+    setMeetupOther('')
+    setAcceptError('')
+  }
+
+  const handleAcceptCash = async () => {
+    const location = meetupLocation === 'Other' ? meetupOther.trim() : meetupLocation
+    if (!location) {
+      setAcceptError('Please choose or enter where on campus you\'ll meet.')
+      return
+    }
+    setPending(acceptTarget._id)
+    const result = await acceptOffer(acceptTarget._id, myId, location)
+    if (result.status === 'success') {
+      setOffers((current) => current.map((o) => (o._id === acceptTarget._id ? result.data : o)))
+      setAcceptTarget(null)
+    } else {
+      setAcceptError(result.message || 'Something went wrong.')
     }
     setPending(null)
   }
@@ -106,7 +137,14 @@ export default function MyOffers() {
                       <Button variant="ghost" size="sm" loading={pending === offer._id} onClick={() => runAction(offer, withdrawOffer)}>Withdraw</Button>
                     ) : (
                       <>
-                        <Button variant="accent" size="sm" loading={pending === offer._id} onClick={() => runAction(offer, acceptOffer)}>Accept</Button>
+                        <Button
+                          variant="accent"
+                          size="sm"
+                          loading={pending === offer._id}
+                          onClick={() => offer.offerType === 'barter' ? runAction(offer, acceptOffer) : openAcceptModal(offer)}
+                        >
+                          Accept
+                        </Button>
                         <Button variant="ghost" size="sm" loading={pending === offer._id} onClick={() => runAction(offer, declineOffer)}>Decline</Button>
                       </>
                     )}
@@ -123,6 +161,32 @@ export default function MyOffers() {
           })}
         </div>
       </div>
+
+      <Modal open={!!acceptTarget} onClose={() => setAcceptTarget(null)} title="Arrange Pickup">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <p style={{ fontSize: '13px', color: colors.textMuted, margin: 0 }}>
+            Pick a public, well-known spot on campus to meet, hand over the item, and collect payment of ₦{acceptTarget?.offerAmount?.toLocaleString()}.
+          </p>
+          <Select label="Meetup location" value={meetupLocation} onChange={(e) => setMeetupLocation(e.target.value)}>
+            {CAMPUS_LOCATIONS.map((loc) => (
+              <option key={loc} value={loc}>{loc}</option>
+            ))}
+            <option value="Other">Other (specify)</option>
+          </Select>
+          {meetupLocation === 'Other' && (
+            <Input
+              label="Where on campus?"
+              value={meetupOther}
+              onChange={(e) => setMeetupOther(e.target.value)}
+              placeholder="e.g. Faculty of Technology"
+            />
+          )}
+          {acceptError && <span style={{ fontSize: '12px', color: colors.danger }}>{acceptError}</span>}
+          <Button variant="accent" loading={pending === acceptTarget?._id} onClick={handleAcceptCash}>
+            Accept &amp; Confirm Pickup
+          </Button>
+        </div>
+      </Modal>
     </div>
   )
 }

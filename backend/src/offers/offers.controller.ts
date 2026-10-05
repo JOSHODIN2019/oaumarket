@@ -1,4 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { AcceptOfferDto } from './dto/accept-offer.dto.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { RespondOfferDto } from './dto/respond-offer.dto.js';
 import { OffersService } from './offers.service.js';
@@ -26,8 +27,8 @@ export class OffersController {
   }
 
   @Patch(':id/accept')
-  accept(@Param('id') id: string, @Body() dto: RespondOfferDto) {
-    return this.offersService.accept(id, dto.actorId);
+  accept(@Param('id') id: string, @Body() dto: AcceptOfferDto) {
+    return this.offersService.accept(id, dto.actorId, dto.meetupLocation);
   }
 
   @Patch(':id/decline')

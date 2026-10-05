@@ -96,8 +96,7 @@ export class AdminDashboardService {
       status: transaction.status,
       flagged: transaction.flagged,
       flagReason: transaction.flagReason,
-      paymentMethod: transaction.paymentMethod,
-      paymentReference: transaction.paymentReference,
+      meetupLocation: transaction.meetupLocation,
       createdAt: (transaction as unknown as { createdAt: Date }).createdAt,
     };
   }

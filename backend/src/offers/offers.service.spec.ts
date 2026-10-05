@@ -109,11 +109,19 @@ describe('OffersService', () => {
       const offer = pendingOffer();
       offerModel.findById.mockReturnValue({ exec: vi.fn().mockResolvedValue(offer) });
 
-      const result = await service.accept('507f1f77bcf86cd799439011', sellerId);
+      const result = await service.accept('507f1f77bcf86cd799439011', sellerId, 'Oduduwa Hall');
 
-      expect(transactionsService.create).toHaveBeenCalledWith({ buyerId, sellerId, productId: 'p1', amount: 1000, paymentMethod: 'cash_on_pickup' });
+      expect(transactionsService.create).toHaveBeenCalledWith({ buyerId, sellerId, productId: 'p1', amount: 1000, meetupLocation: 'Oduduwa Hall' });
       expect(result.status).toBe('accepted');
       expect(result.transactionId).toBe('transaction-1');
+    });
+
+    it('rejects accepting a cash offer without a meetup location', async () => {
+      const offer = pendingOffer();
+      offerModel.findById.mockReturnValue({ exec: vi.fn().mockResolvedValue(offer) });
+
+      await expect(service.accept('507f1f77bcf86cd799439011', sellerId)).rejects.toThrow(BadRequestException);
+      expect(transactionsService.create).not.toHaveBeenCalled();
     });
 
     it('rejects accepting a non-pending offer', async () => {

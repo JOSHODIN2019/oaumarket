@@ -14,12 +14,6 @@ const STATUS_STYLES = {
   cancelled: { bg: '#f3f3f4', color: colors.textMuted },
 }
 
-const PAYMENT_LABELS = {
-  card: 'Card',
-  bank_transfer: 'Bank Transfer',
-  cash_on_pickup: 'Cash on Pickup',
-}
-
 export default function AdminTransactions() {
   const session = getAdminSession()
   const token = session?.accessToken
@@ -74,8 +68,7 @@ export default function AdminTransactions() {
                   <div style={{ minWidth: 0, flex: '1 1 200px' }}>
                     <p style={{ fontSize: '13px', fontWeight: 600, color: colors.text, margin: 0 }}>Transaction {t.id.slice(-6)}</p>
                     <p style={{ fontSize: '12px', color: colors.textMuted, margin: '2px 0 0' }}>
-                      Product {t.productId.slice(-6)} · ₦{t.amount.toLocaleString()} · {PAYMENT_LABELS[t.paymentMethod] || t.paymentMethod}
-                      {t.paymentReference ? ` · Ref: ${t.paymentReference}` : ''}
+                      Product {t.productId.slice(-6)} · ₦{t.amount.toLocaleString()} · Meet at {t.meetupLocation}
                     </p>
                     {t.flagged && <p style={{ fontSize: '12px', color: colors.danger, margin: '4px 0 0', fontWeight: 600 }}>⚑ {t.flagReason}</p>}
                   </div>

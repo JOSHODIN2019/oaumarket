@@ -1,6 +1,4 @@
-import { IsIn, IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
-import { PAYMENT_METHODS } from '../schemas/transaction.schema.js';
-import type { PaymentMethod } from '../schemas/transaction.schema.js';
+import { IsNotEmpty, IsNumber, IsPositive, IsString, MaxLength } from 'class-validator';
 
 export class CreateTransactionDto {
   @IsString()
@@ -19,6 +17,8 @@ export class CreateTransactionDto {
   @IsPositive()
   amount: number;
 
-  @IsIn(PAYMENT_METHODS)
-  paymentMethod: PaymentMethod;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(120)
+  meetupLocation: string;
 }
